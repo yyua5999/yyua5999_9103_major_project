@@ -52,6 +52,10 @@ class ImageSegment {
     this.srcImgSegWidth = srcImgSegWidthInPrm;
     this.srcImgSegHeight = srcImgSegHeightInPrm;
     this.srcImgSegColour = srcImgSegColourInPrm;
+
+    // Initialize noise offsets for each segment
+    this.noiseOffsetX = random(1000);
+    this.noiseOffsetY = random(1000);
   }
 
   draw() {

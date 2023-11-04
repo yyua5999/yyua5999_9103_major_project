@@ -3,6 +3,9 @@
 let img;
 let numSegments = 80;
 let segments;
+// Add a global variable for noise offset
+let noiseOffsetIncrement = 0.01;
+let maxDisplacement = 10; // Maximum displacement for noise
 
 function preload() {
   img = loadImage('assets/Edvard_Munch_The_Scream.jpg');

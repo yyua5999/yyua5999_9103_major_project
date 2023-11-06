@@ -87,3 +87,15 @@ function make2Darray(cols, rows) {
   return arr;
 
 }
+
+// In the draw function, update and draw each segment
+function draw() {
+  background(0);
+
+  // Loop through and draw segments with updated noise positions
+  for (let y = 0; y < segments.length; y++) {
+    for (let x = 0; x < segments[y].length; x++) {
+      segments[y][x].draw();
+    }
+  }
+}

@@ -43,51 +43,52 @@ function keyPressed() {
 }
 
 class ImageSegment {
-
-    // Additional properties for noise-based color transition
-  constructor(srcImgSegXPosInPrm, srcImgSegYPosInPrm, srcImgSegWidthInPrm, srcImgSegHeightInPrm, srcImgSegColourInPrm) {
-
-    this.noiseOffset = random(1000); // A unique offset for each segment
-    this.srcImgSegXPos = srcImgSegXPosInPrm;
-    this.srcImgSegYPos = srcImgSegYPosInPrm;
-    this.srcImgSegWidth = srcImgSegWidthInPrm;
-    this.srcImgSegHeight = srcImgSegHeightInPrm;
-    this.srcImgSegColour = srcImgSegColourInPrm;
-  }
-
+    constructor(srcImgSegXPosInPrm, srcImgSegYPosInPrm, srcImgSegWidthInPrm, srcImgSegHeightInPrm, srcImgSegColourInPrm) {
+      this.srcImgSegXPos = srcImgSegXPosInPrm;
+      this.srcImgSegYPos = srcImgSegYPosInPrm;
+      this.srcImgSegWidth = srcImgSegWidthInPrm;
+      this.srcImgSegHeight = srcImgSegHeightInPrm;
+      this.srcImgSegColour = srcImgSegColourInPrm;
+      this.noiseOffset = random(1000); // A unique noise offset for color transition
+    }
   
-
-  draw() {
-    let depth = 3;
-    
-    let shadowColor = color(red(this.srcImgSegColour) * 0.8, green(this.srcImgSegColour) * 0.8, blue(this.srcImgSegColour) * 0.8);
-    let highlightColor = color(red(this.srcImgSegColour) * 1.2, green(this.srcImgSegColour) * 1.2, blue(this.srcImgSegColour) * 1.2);
-
-    // Main block color
-    fill(this.srcImgSegColour);
-    noStroke();
-    rect(this.srcImgSegXPos, this.srcImgSegYPos, this.srcImgSegWidth, this.srcImgSegHeight);
-
-    // Top highlight
-    fill(highlightColor);
-    beginShape();
-    vertex(this.srcImgSegXPos, this.srcImgSegYPos);
-    vertex(this.srcImgSegXPos + this.srcImgSegWidth, this.srcImgSegYPos);
-    vertex(this.srcImgSegXPos + this.srcImgSegWidth - depth, this.srcImgSegYPos - depth);
-    vertex(this.srcImgSegXPos - depth, this.srcImgSegYPos - depth);
-    endShape(CLOSE);
-
-    let bumpDiameter = min(this.srcImgSegWidth, this.srcImgSegHeight) * 0.4;
-    // Shadow for bump
-    fill(0, 0, 0, 100); // semi-transparent black for shadow
-    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5 + 2, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-0.5, bumpDiameter, bumpDiameter);
-
-    // Lego bump
-    fill(220);
-    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-2, bumpDiameter, bumpDiameter);
-
+    draw() {
+      // Calculate a noise-based 'lerp' factor for color transition
+      let n = noise(this.noiseOffset);
+      let transitionColor = lerpColor(this.srcImgSegColour, color(255, 204, 0), n); // Example target color
+  
+      // Draw the segment with the interpolated color
+      fill(transitionColor);
+      noStroke();
+      rect(this.srcImgSegXPos, this.srcImgSegYPos, this.srcImgSegWidth, this.srcImgSegHeight);
+  
+      // Increment the noise offset for the next frame to change the 'lerp' factor over time
+      this.noiseOffset += 0.01; // Adjust this value for faster or slower transitions
+  
+      // Draw the rest of the segment details (shadows, highlights, etc.)
+      let depth = 3;
+      let shadowColor = color(red(transitionColor) * 0.8, green(transitionColor) * 0.8, blue(transitionColor) * 0.8);
+      let highlightColor = color(red(transitionColor) * 1.2, green(transitionColor) * 1.2, blue(transitionColor) * 1.2);
+  
+      // Top highlight
+      fill(highlightColor);
+      beginShape();
+      vertex(this.srcImgSegXPos, this.srcImgSegYPos);
+      vertex(this.srcImgSegXPos + this.srcImgSegWidth, this.srcImgSegYPos);
+      vertex(this.srcImgSegXPos + this.srcImgSegWidth - depth, this.srcImgSegYPos - depth);
+      vertex(this.srcImgSegXPos - depth, this.srcImgSegYPos - depth);
+      endShape(CLOSE);
+  
+      // Shadow for bump
+      fill(shadowColor);
+      ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5 + 2, this.srcImgSegYPos + this.srcImgSegHeight * 0.5 - 0.5, this.srcImgSegWidth * 0.4, this.srcImgSegHeight * 0.4);
+  
+      // Lego bump
+      fill(220);
+      ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5, this.srcImgSegYPos + this.srcImgSegHeight * 0.5 - 2, this.srcImgSegWidth * 0.4, this.srcImgSegHeight * 0.4);
+    }
   }
-}
+  
 
 function make2Darray(cols, rows) {
   var arr = new Array(cols);

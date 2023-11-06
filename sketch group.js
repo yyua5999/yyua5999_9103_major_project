@@ -1,7 +1,7 @@
 
 
 let img;
-let numSegments = 60;
+let numSegments = 80;
 let segments;
 
 function preload() {
@@ -32,6 +32,8 @@ function draw() {
       segments[y][x].draw();
     }
   }
+  console.log(segments)
+  console.log(segments[1][2])
 }
 
 function keyPressed() {
@@ -60,23 +62,6 @@ class ImageSegment {
     noStroke();
     rect(this.srcImgSegXPos, this.srcImgSegYPos, this.srcImgSegWidth, this.srcImgSegHeight);
 
-    // Right shadow
-    // fill(shadowColor);
-    // beginShape();
-    // vertex(this.srcImgSegXPos + this.srcImgSegWidth, this.srcImgSegYPos);
-    // vertex(this.srcImgSegXPos + this.srcImgSegWidth + depth, this.srcImgSegYPos + depth);
-    // vertex(this.srcImgSegXPos + this.srcImgSegWidth + depth, this.srcImgSegYPos + this.srcImgSegHeight + depth);
-    // vertex(this.srcImgSegXPos + this.srcImgSegWidth, this.srcImgSegYPos + this.srcImgSegHeight);
-    // endShape(CLOSE);
-
-    // Bottom shadow
-    // beginShape();
-    // vertex(this.srcImgSegXPos, this.srcImgSegYPos + this.srcImgSegHeight);
-    // vertex(this.srcImgSegXPos + this.srcImgSegWidth, this.srcImgSegYPos + this.srcImgSegHeight);
-    // vertex(this.srcImgSegXPos + this.srcImgSegWidth + depth, this.srcImgSegYPos + this.srcImgSegHeight + depth);
-    // vertex(this.srcImgSegXPos, this.srcImgSegYPos + this.srcImgSegHeight + depth);
-    // endShape(CLOSE);
-
     // Top highlight
     fill(highlightColor);
     beginShape();
@@ -86,13 +71,13 @@ class ImageSegment {
     vertex(this.srcImgSegXPos - depth, this.srcImgSegYPos - depth);
     endShape(CLOSE);
 
-    let bumpDiameter = min(this.srcImgSegWidth, this.srcImgSegHeight) * 0.5;
+    let bumpDiameter = min(this.srcImgSegWidth, this.srcImgSegHeight) * 0.4;
     // Shadow for bump
-    fill(0, 0, 0, 50); // semi-transparent black for shadow
+    fill(0, 0, 0, 100); // semi-transparent black for shadow
     ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5 + 2, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-0.5, bumpDiameter, bumpDiameter);
 
     // Lego bump
-    fill(255);
+    fill(220);
     ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-2, bumpDiameter, bumpDiameter);
 
   }
@@ -104,4 +89,5 @@ function make2Darray(cols, rows) {
     arr[i] = new Array(rows);
   }
   return arr;
+
 }

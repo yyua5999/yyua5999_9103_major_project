@@ -35,6 +35,20 @@ function windowResized() {
   resizeSegments(); // Recalculate segment sizes and positions
 }
 
+function resizeSegments() {
+  let segmentWidth = width / numSegments;
+  let segmentHeight = height / numSegments;
+  segments = make2Darray(numSegments, numSegments); // Initialize the 2D array with new sizes
+  
+  for (let y = 0; y < numSegments; y++) {
+    for (let x = 0; x < numSegments; x++) {
+      let segXPos = x * segmentWidth;
+      let segYPos = y * segmentHeight;
+      let segmentColour = img.get(segXPos * originalWidth / width, segYPos * originalHeight / height);
+      segments[y][x] = new ImageSegment(segXPos, segYPos, segmentWidth, segmentHeight, segmentColour);
+    }
+  }
+}
 
 class ImageSegment {
   constructor(srcImgSegXPosInPrm, srcImgSegYPosInPrm, srcImgSegWidthInPrm, srcImgSegHeightInPrm, srcImgSegColourInPrm) {

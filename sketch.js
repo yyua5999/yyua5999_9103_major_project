@@ -58,35 +58,24 @@ class ImageSegment {
     this.noiseOffsetY = random(1000);
   }
 
+  // Modify the draw function to use noise for animation
   draw() {
-    let depth = 3;
-    
-    let shadowColor = color(red(this.srcImgSegColour) * 0.8, green(this.srcImgSegColour) * 0.8, blue(this.srcImgSegColour) * 0.8);
-    let highlightColor = color(red(this.srcImgSegColour) * 1.2, green(this.srcImgSegColour) * 1.2, blue(this.srcImgSegColour) * 1.2);
+    // Calculate noise-based displacement
+    let noiseX = noise(this.noiseOffsetX) * maxDisplacement - maxDisplacement / 2;
+    let noiseY = noise(this.noiseOffsetY) * maxDisplacement - maxDisplacement / 2;
 
-    // Main block color
+    // Apply the noise displacement to the position
+    let x = this.srcImgSegXPos + noiseX;
+    let y = this.srcImgSegYPos + noiseY;
+
+    // Draw the segment with the new position
     fill(this.srcImgSegColour);
     noStroke();
-    rect(this.srcImgSegXPos, this.srcImgSegYPos, this.srcImgSegWidth, this.srcImgSegHeight);
+    rect(x, y, this.srcImgSegWidth, this.srcImgSegHeight);
 
-    // Top highlight
-    fill(highlightColor);
-    beginShape();
-    vertex(this.srcImgSegXPos, this.srcImgSegYPos);
-    vertex(this.srcImgSegXPos + this.srcImgSegWidth, this.srcImgSegYPos);
-    vertex(this.srcImgSegXPos + this.srcImgSegWidth - depth, this.srcImgSegYPos - depth);
-    vertex(this.srcImgSegXPos - depth, this.srcImgSegYPos - depth);
-    endShape(CLOSE);
-
-    let bumpDiameter = min(this.srcImgSegWidth, this.srcImgSegHeight) * 0.4;
-    // Shadow for bump
-    fill(0, 0, 0, 100); // semi-transparent black for shadow
-    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5 + 2, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-0.5, bumpDiameter, bumpDiameter);
-
-    // Lego bump
-    fill(220);
-    ellipse(this.srcImgSegXPos + this.srcImgSegWidth * 0.5, this.srcImgSegYPos + this.srcImgSegHeight * 0.5-2, bumpDiameter, bumpDiameter);
-
+    // Increment the noise offset for the next frame
+    this.noiseOffsetX += noiseOffsetIncrement;
+    this.noiseOffsetY += noiseOffsetIncrement;
   }
 }
 

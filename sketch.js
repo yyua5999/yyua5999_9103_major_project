@@ -30,11 +30,11 @@ function draw() {
   }
 }
 
-function keyPressed() {
-  if (key == " ") {
-    drawSegments = !drawSegments;
-  }
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  resizeSegments(); // Recalculate segment sizes and positions
 }
+
 
 class ImageSegment {
   constructor(srcImgSegXPosInPrm, srcImgSegYPosInPrm, srcImgSegWidthInPrm, srcImgSegHeightInPrm, srcImgSegColourInPrm) {
